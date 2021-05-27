@@ -26,22 +26,22 @@ def get_union(pD,pG):
 #predict_txt_list=glob.glob('original_USGS_txt_04/USGS-15-CA-brawley-e1957-s1957-p1961.txt')
 #predict_txt_list=glob.glob('original_USGS_txt_04/USGS-15-CA-capesanmartin-e1921-s1917.txt')
 #predict_txt_list=glob.glob('weinman19_txt_04/D0006-0285025.txt')
-#predict_txt_list=glob.glob('D:/textDetect_evalSet/psenet_weinman19_maplevel/*.txt')
-predict_txt_list=glob.glob('D:/textDetect_evalSet/google_vision_api_weinman_results/*.txt')
+predict_txt_list=glob.glob('D:/textDetect_evalSet/tt_finetune_weinman19_512_wholeMap/*.txt')
+#predict_txt_list=glob.glob('D:/textDetect_evalSet/results_txt/synthtext_wce_w1_modelv4_vgg_textprob_centerline/weinman/txt/*.txt')
 
 #image_folder_path='E:/Spatial Computing & Informatics Laboratory/CutTextArea/dataset/original_size_OS_USGS_jpg/'
 image_folder_path='E:/Spatial Computing & Informatics Laboratory/CutTextArea/dataset/weinman19-maps-jpg/'
 
 #GT_folder_path='original_size_OS_USGS/'
 #GT_folder_path='original_more_OS_USGS_txt_GT/'
-GT_folder_path='weinman19_GT_txt/'
+GT_folder_path='../weinman19_GT_txt/'
 
 #output_path='OS_USGS_eval/'
-output_path='GoogleVision_weinman19_output/'
+#output_path='../testOutput/'
 
 #用csv文件保存结果
-csv_dir='csvOutput/'
-csvfile = open(csv_dir+'GoogleVision_weinman19_tr0.5_tp0.5_k1.csv','w',newline='')
+csv_dir='../csvOutput/'
+csvfile = open(csv_dir+'tt_finetune_weinman19_512_wholeMap_tr0.5_tp0.5_k1.csv','w',newline='')
 writeCSV=csv.writer(csvfile)
 writeCSV.writerow(['mapName','recall','precision','f1'])
 
@@ -75,8 +75,8 @@ for txt_path in predict_txt_list:
         poly = []
 
         #only for googleVision
-        for i in range(0, 7):
-        #for i in range(0, len(polyStr)):
+        #for i in range(0, 7):
+        for i in range(0, len(polyStr)):
             if i % 2 == 0:
                 poly.append([float(polyStr[i]), float(polyStr[i + 1])])
 
@@ -136,7 +136,7 @@ for txt_path in predict_txt_list:
 
         cv2.polylines(image, polyPoints, True, (255, 0, 0), 1)
 
-    cv2.imwrite(output_path+'GT_predict_'+base_name[0:len(base_name) - 4] + '.jpg',image)
+    #cv2.imwrite(output_path+'GT_predict_'+base_name[0:len(base_name) - 4] + '.jpg',image)
 
     #cv2.waitKey()
 
@@ -331,7 +331,11 @@ for txt_path in predict_txt_list:
             precisionlist.append(overall_precision)
 
             if tr==0.5 and tp==0.5:
-                f1_score = round(2 * (overall_recall * overall_precision / (overall_recall + overall_precision)),3)
+                if overall_recall + overall_precision != 0:
+                    f1_score = round(2 * (overall_recall * overall_precision / (overall_recall + overall_precision)),3)
+                else:
+                    f1_score = 0
+
                 print('tr:',tr,' tp:',tp,' k:',k,' recall:',overall_recall,' precision:',overall_precision,' f1:',f1_score)
                 writeCSV.writerow([base_name[0:len(base_name) - 4], overall_recall, overall_precision, f1_score])
 
@@ -348,7 +352,7 @@ for txt_path in predict_txt_list:
                         polyPoints = np.array([GT_polyList[i]], dtype=np.int32)
                         cv2.polylines(image_2, polyPoints, True, (0, 255, 0), 1)
 
-                cv2.imwrite(output_path+'Fail_GT_predict_' + base_name[0:len(base_name) - 4] + '.jpg', image_2)
+                #cv2.imwrite(output_path+'Fail_GT_predict_' + base_name[0:len(base_name) - 4] + '.jpg', image_2)
 
 
 

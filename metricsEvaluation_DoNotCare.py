@@ -27,24 +27,24 @@ def get_union(pD,pG):
 
 #predict_txt_list=glob.glob('D:/textDetect_evalSet/east_map_res_maplevel/*.txt')
 #predict_txt_list=glob.glob('D:/textDetect_evalSet/psenet_map_res_maplevel/*.txt')
-#predict_txt_list=glob.glob('D:/textDetect_evalSet/mapLevel_USGS_results/*.txt')
-predict_txt_list=glob.glob('D:/textDetect_evalSet/zekunSetting_bigF_sChar_e600_wholemap_result/*.txt')
+predict_txt_list=glob.glob('D:/textDetect_evalSet/synthText_model1.0_wholemap_OS/*.txt')
+#predict_txt_list=glob.glob('D:/textDetect_evalSet/results_txt/synthtext_wce_w1_modelv4_vgg_textprob_centerline/usgs/txt/*.txt')
 
 image_folder_path='E:/Spatial Computing & Informatics Laboratory/CutTextArea/dataset/original_size_OS_USGS_jpg/'
 #image_folder_path='E:/Spatial Computing & Informatics Laboratory/CutTextArea/dataset/weinman19-maps/'
 
-GT_folder_path='original_size_OS_USGS/'
+GT_folder_path='../original_size_OS_USGS/'
 
-more_GT_folder_path='original_more_OS_USGS_txt_GT/'
+more_GT_folder_path='../original_more_OS_USGS_txt_GT/'
 
 #GT_folder_path='weinman19_GT_txt/'
 
-output_path='zkSetting_bigF_sChar_e600_result_output/'
+output_path='../testOutput/'
 #output_path='weinman_eval/'
 
 #用csv文件保存结果
-csv_dir='csvOutput/'
-csvfile = open(csv_dir+'zkSetting_bigF_sChar_e600_result_OS_USGS_tr0.5_tp0.5_k1.csv','w',newline='')
+csv_dir='../csvOutput/'
+csvfile = open(csv_dir+'synthText_model1.0_wholemap_OS_tr0.5_tp0.5_k1.csv','w',newline='')
 writeCSV=csv.writer(csvfile)
 writeCSV.writerow(['mapName','recall','precision','f1'])
 
@@ -82,7 +82,7 @@ for txt_path in predict_txt_list:
 
         polyRange=0
 
-        #GoogleVision的output最后会有文字的结果
+        #GoogleVision和weinman的output最后会有文字的结果
         for i in range(0, len(polyStr)):
         #for i in range(0, 7):
             if i % 2 == 0:
@@ -178,7 +178,7 @@ for txt_path in predict_txt_list:
 
         cv2.polylines(image, polyPoints, True, (0, 255, 0), 1)
 
-    cv2.imwrite(output_path+'GT_predict_'+base_name[0:len(base_name) - 4] + '.jpg',image)
+    #cv2.imwrite(output_path+'GT_predict_'+base_name[0:len(base_name) - 4] + '.jpg',image)
 
     #算出GT box的合并
     all_GT_polyList=GT_polyList+more_GT_polyList
@@ -391,7 +391,7 @@ for txt_path in predict_txt_list:
                         polyPoints = np.array([GT_polyList[i]], dtype=np.int32)
                         cv2.polylines(image_2, polyPoints, True, (255, 0, 0), 1)
 
-                cv2.imwrite(output_path+'Fail_GT_predict_' + base_name[0:len(base_name) - 4] + '.jpg', image_2)
+                #cv2.imwrite(output_path+'Fail_GT_predict_' + base_name[0:len(base_name) - 4] + '.jpg', image_2)
 
 
 

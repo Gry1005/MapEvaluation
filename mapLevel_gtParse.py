@@ -8,11 +8,11 @@ import numpy as np
 image_list=glob.glob('E:/Spatial Computing & Informatics Laboratory/CutTextArea/dataset/original_size_OS_USGS_jpg/*.jpg')
 
 #txt_folder='original_more_OS_USGS_txt_GT/'
-txt_folder='D:/textDetect_evalSet/psenet_map_res_maplevel/'
+txt_folder='D:/textDetect_evalSet/weinman_output_OS_USGS/'
 
-outputFolder='testOutput/'
+outputFolder='../weinman_mapLevel_output/'
 
-for image_path in image_list[1:2]:
+for image_path in image_list[0:2]:
 
     base_name = os.path.basename(image_path)
 
@@ -44,7 +44,7 @@ for image_path in image_list[1:2]:
         poly=[]
 
         for i in range(0,len(polyStr)):
-            if i%2==0:
+            if i%2==0 and i<8:
                 poly.append([float(polyStr[i]),float(polyStr[i+1])])
 
         polyList.append(poly)
@@ -65,4 +65,4 @@ for image_path in image_list[1:2]:
 
     cv2.imwrite(outputFolder+'parse_result_'+base_name[0:len(base_name) - 4] + '.jpg',image_x)
 
-    cv2.imwrite(outputFolder+'masked_' + base_name[0:len(base_name) - 4] + '.jpg', txt_pixel_result)
+    #cv2.imwrite(outputFolder+'masked_' + base_name[0:len(base_name) - 4] + '.jpg', txt_pixel_result)
